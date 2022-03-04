@@ -1,3 +1,9 @@
+
+# Exclude project's folder
+.pio/
+.vscode/
+.files/
+
 # Prerequisites
 *.d
 
