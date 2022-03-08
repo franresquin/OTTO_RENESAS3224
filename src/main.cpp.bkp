@@ -1,0 +1,39 @@
+#include <Arduino.h>
+#include <Wire.h>
+#include <Renesas3224.h>
+
+#define UPDATING_PERIOD_MS 1000
+
+#define HostCom Serial
+#define HOST_BAUDRATE 115200
+#define HOST_TIMEOUT  1
+
+RENESAS3224 device(0x01);
+
+void setup() {
+
+  // Serial port configuration //
+  HostCom.begin(HOST_BAUDRATE);
+  HostCom.setTimeout(HOST_TIMEOUT);
+
+  // Init I2C port //
+  Wire.begin();
+  device.begin(Wire);
+
+}
+
+void loop() {
+  static unsigned long interval_ms=millis();
+  unsigned long mtime = millis();
+  uint8_t status;
+
+  if(mtime >= interval_ms){
+    
+    HostCom.print(">> Status: ");
+    status = device.getStatus();
+    HostCom.print(status);
+    HostCom.println("");
+
+    interval_ms += UPDATING_PERIOD_MS;
+  }
+}
